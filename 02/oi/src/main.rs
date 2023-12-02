@@ -39,7 +39,7 @@ fn oi(draws: &str, colour: &str) -> usize {
             draw.split(", ").map(|count| {
                 let (n, c) = count.split_once(' ').expect("count");
                 (c == colour)
-                    .then_some(n.parse().expect("usize count"))
+                    .then(|| n.parse().expect("usize count"))
                     .unwrap_or(0)
             })
         })
