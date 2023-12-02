@@ -8,17 +8,16 @@ fn main() {
     let result: usize = lines.iter().fold(0, |result, line| {
         let (game_id, draws) = line.split_once(": ").expect("first split");
         result
-            + if [("red", 12), ("green", 13), ("blue", 14)]
+            + [("red", 12), ("green", 13), ("blue", 14)]
                 .into_iter()
                 .all(|(c, n)| oi(draws, c) <= n)
-            {
-                game_id
-                    .trim_start_matches("Game ")
-                    .parse()
-                    .expect("integer id")
-            } else {
-                0
-            }
+                .then(|| {
+                    game_id
+                        .trim_start_matches("Game ")
+                        .parse()
+                        .expect("integer id")
+                })
+                .unwrap_or(0)
     });
     println!("oi: {result}");
 
@@ -40,8 +39,7 @@ fn oi(draws: &str, colour: &str) -> usize {
             draw.split(", ").map(|count| {
                 let (n, c) = count.split_once(' ').expect("count");
                 (c == colour)
-                    .then_some(n)
-                    .map(|n| n.parse().expect("usize count"))
+                    .then_some(n.parse().expect("usize count"))
                     .unwrap_or(0)
             })
         })
