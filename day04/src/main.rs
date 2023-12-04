@@ -1,7 +1,5 @@
-use std::io::BufRead;
-
 fn main() {
-    let lines = std::io::BufReader::new(std::io::stdin())
+    let lines = std::io::stdin()
         .lines()
         .map(|l| l.unwrap())
         .collect::<Vec<_>>();
