@@ -15,14 +15,9 @@ fn main() {
     println!("oioi: {}", counts.iter().sum::<usize>());
 }
 
-fn score(l: &str) -> usize {
+fn score<'a>(l: &'a str) -> usize {
     let (wins, card) = l.split_once(": ").unwrap().1.split_once(" | ").unwrap();
-    let wins = wins
-        .split(' ')
-        .filter_map(|n| n.parse::<usize>().ok())
-        .collect::<std::collections::HashSet<_>>();
-    card.split(' ')
-        .filter_map(|n| n.parse::<usize>().ok())
-        .filter_map(|n| wins.contains(&n).then_some(1))
-        .sum()
+    let split = |s: &'a str| s.split(' ').filter_map(|n| n.parse::<usize>().ok());
+    let wins = split(wins).collect::<std::collections::HashSet<_>>();
+    split(card).filter(|n| wins.contains(n)).count()
 }
